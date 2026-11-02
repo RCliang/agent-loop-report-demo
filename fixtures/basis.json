@@ -1,0 +1,16 @@
+{
+  "fictional": true,
+  "period": ["2026-10-19", "2026-10-25"],
+  "currency": "CNY",
+  "description": "虚构办公教学数据；部门口径已确认一致。订单编号在本任务中唯一，金额以元计。排除重复行需核对归档记录，原始文件保持不变。编号相同但内容冲突时询问用户。",
+  "sources": {
+    "dept_a.csv": {"department": "一部", "id": "订单编号", "dept": "部门", "date": "日期", "amount": "销售额(元)"},
+    "dept_b.csv": {"department": "二部", "id": "业务单号", "dept": "团队", "date": "业务日期", "amount": "成交金额(元)"},
+    "dept_c.csv": {"department": "三部", "id": "单号", "dept": "部门", "date": "日期", "amount": "销售额(元)"}
+  },
+  "confirmed_totals": {"一部": "3000.00", "二部": "4000.00", "三部": "2000.00"},
+  "previous_totals": {"一部": "2500.00", "二部": "3500.00", "三部": "2000.00"},
+  "archive": {
+    "B202": [{"id": "B202", "department": "二部", "date": "2026-10-22", "amount": "2500.00"}]
+  }
+}
