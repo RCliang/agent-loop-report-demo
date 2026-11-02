@@ -65,6 +65,10 @@ def run_minimal(source_dir, model=None):
 def main():
     here = Path(__file__).resolve().parent
     started = datetime.now(timezone(timedelta(hours=8)))
+    try:
+        model = DeepSeekModel()
+    except ValueError as exc:
+        raise SystemExit(str(exc)) from None
     folder = here/"runs"/"minimal"/started.strftime("%Y%m%d-%H%M%S")
     folder.mkdir(parents=True)
     source = folder/"source"
@@ -72,12 +76,11 @@ def main():
     names = ("minimal_loop.py", "deepseek_model.py", "report_service.py")
     for name in names:
         (source/name).write_bytes((here/name).read_bytes())
-    model = DeepSeekModel()
     model.audit_path = folder/"requests.json"
     result = run_minimal(here/"fixtures", model=model)
-    (folder/"trace.json").write_text(json.dumps(result, ensure_ascii=False, indent=2)+"\n")
+    (folder/"trace.json").write_text(json.dumps(result, ensure_ascii=False, indent=2)+"\n", encoding="utf-8")
     if result["report"] is not None:
-        (folder/"report.json").write_text(json.dumps(result["report"], ensure_ascii=False, indent=2)+"\n")
+        (folder/"report.json").write_text(json.dumps(result["report"], ensure_ascii=False, indent=2)+"\n", encoding="utf-8")
     summary = {"started_at": started.isoformat(), "finished_at": datetime.now(timezone(timedelta(hours=8))).isoformat(),
                "input_hashes": file_hashes(here/"fixtures"),
                "code_hashes": {name: hashlib.sha256((source/name).read_bytes()).hexdigest() for name in names},
@@ -85,7 +88,7 @@ def main():
                "decision_turns": result["decision_turns"], "action_count": result["action_count"],
                "business_verified": result["business_verified"], "source_unchanged": result["source_unchanged"],
                "model_metadata": result["model_metadata"]}
-    (folder/"summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2)+"\n")
+    (folder/"summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2)+"\n", encoding="utf-8")
     from live_run import markdown_trace
     (folder/"trace.md").write_text(markdown_trace("minimal", result), encoding="utf-8")
     (folder.parent/"current.json").write_text(json.dumps({"directory": folder.name}, ensure_ascii=False, indent=2)+"\n", encoding="utf-8")

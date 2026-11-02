@@ -53,6 +53,8 @@ python -m unittest discover -s . -p "test_*.py" -v
 cp .env.example .env
 ```
 
+Windows 命令提示符使用 `copy .env.example .env`，PowerShell 使用 `Copy-Item .env.example .env`。
+
 编辑 `.env`：
 
 ```dotenv
